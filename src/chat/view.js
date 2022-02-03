@@ -6,7 +6,6 @@ import {StompSessionProvider} from "react-stomp-hooks";
 import {user} from "./user";
 
 function ChatView() {
-    console.log(1)
     const location = useLocation();
     const [enter, setEnter] = useState("");
     const [roomId, setRoomId] = useState(location.pathname.split("/")[2]);
@@ -38,13 +37,13 @@ function ChatView() {
     const connect = () => {
         client.current = new StompJs.Client({
             //brokerURL: 'ws://125.179.146.62:8080/jdh-stomp',
-            brokerURL: 'ws://192.168.50.59:8080/jdh-stomp',
-            //brokerURL: 'ws://localhost:8080/jdh-stomp',
+            //brokerURL: 'ws://192.168.50.59:8080/jdh-stomp',
+            brokerURL: 'ws://localhost:8080/jdh-stomp',
             reconnectDelay: 5000,
             heartbeatIncoming: 4000,
             heartbeatOutgoing: 4000,
             connectHeaders: {
-                "Authorization" : user().token
+                Authorization : user().token
             },
             onConnect: () => {
                 publish("ENTER", "");
@@ -63,6 +62,7 @@ function ChatView() {
 
     const subscribe = () => {
         client.current.subscribe("/sub/chat/room/"+roomId, (data) => {
+            console.log(JSON.parse(data.body))
             setEnter((prevEnter) => [...prevEnter, JSON.parse(data.body)]);
         });
     };
@@ -100,38 +100,36 @@ function ChatView() {
     });
 
     return (
-        <StompSessionProvider url={"ws://192.168.50.59:8080/jdh-stomp"}>
-            <section className="container">
-                <header className="header flex-box flex-ver-c">
-                    <Link to="/list" className="button mr-15"><i className="fas fa-arrow-circle-left"></i></Link>
-                    <h1 className="title">{roomName}</h1>
-                </header>
-                <section className="chat-view">
-                    {
-                        enter && enter.map((item, index) => {
-                            return (
-                                <div className={item.type === "ENTER" ? "chat-item view-enter" : "chat-item view-talk"} key={index} ref={scrollRef}>
-                                    {
-                                        item.type === "ENTER" ? "" : <div className="icon"><i className="fab fa-jenkins" aria-hidden="true"></i></div>
-                                    }
-                                    <div className="item-box">
-                                        {item.type === "ENTER" ? "" : <div className="title">{item.sender}</div>}
-                                        <div className="talk">{item.message}</div>
-                                        {item.type === "ENTER" ? "" : <div className="date">{item.regDt.substr(0,16)}</div>}
-                                    </div>
+        <section className="container">
+            <header className="header flex-box flex-ver-c">
+                <Link to="/list" className="button mr-15"><i className="fas fa-arrow-circle-left"></i></Link>
+                <h1 className="title">{roomName}</h1>
+            </header>
+            <section className="chat-view">
+                {
+                    enter && enter.map((item, index) => {
+                        return (
+                            <div className={item.type === "ENTER" ? "chat-item view-enter" : "chat-item view-talk"} key={index} ref={scrollRef}>
+                                {
+                                    item.type === "ENTER" ? "" : <div className="icon"><i className="fab fa-jenkins" aria-hidden="true"></i></div>
+                                }
+                                <div className="item-box">
+                                    {item.type === "ENTER" ? "" : <div className="title">{item.sender}</div>}
+                                    <div className="talk">{item.message}</div>
+                                    {item.type === "ENTER" ? "" : <div className="date">{item.regDt.substr(0,16)}</div>}
                                 </div>
-                            )
-                        })
-                    }
-                </section>
-                <div className="send-box">
-                    <input type="text" className="form-control message" onChange={e => saveMsg(e)} onKeyUp={e=> {if(e.keyCode === 13) submit(e)}} value={msg} placeholder="메세지를 입력하세요." ref={el => inputRef.current["msg"] = el} />
-                    <button type="submit" onClick={e => submit(e)} title="메세지 보내기" className="button">
-                        <i className="fas fa-paper-plane"></i>
-                    </button>
-                </div>
+                            </div>
+                        )
+                    })
+                }
             </section>
-        </StompSessionProvider>
+            <div className="send-box">
+                <input type="text" className="form-control message" onChange={e => saveMsg(e)} onKeyUp={e=> {if(e.keyCode === 13) submit(e)}} value={msg} placeholder="메세지를 입력하세요." ref={el => inputRef.current["msg"] = el} />
+                <button type="submit" onClick={e => submit(e)} title="메세지 보내기" className="button">
+                    <i className="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </section>
     )
 }
 

@@ -61,6 +61,12 @@ function ChatList() {
     const logout = () => {
         localStorage.clear();
         navigate("/");
+        /*axios({
+            method: "post",
+            url: "/logout"
+        }).then(response => {
+            console.log(response);
+        });*/
     }
 
     return (

@@ -26,7 +26,7 @@ function ChatView() {
 
         connect();
 
-         return () => disconnect();
+        return () => disconnect();
     }, []);
 
     // 채팅 업데이트에 맞게 스크롤 맨밑으로 이동
@@ -43,7 +43,7 @@ function ChatView() {
             heartbeatIncoming: 4000,
             heartbeatOutgoing: 4000,
             connectHeaders: {
-                Authorization : user().token
+                "Authorization" : user().token
             },
             onConnect: () => {
                 publish("ENTER", "");
