@@ -1,0 +1,232 @@
+@charset "utf-8";
+
+/* ## layout s ## */
+.header {
+    padding:15px 20px;
+    background: #1976d2;
+    color:#fff;
+    position: sticky;
+    left: 0;
+    top:0;
+    width: 100%;
+    height: 58px;
+}
+.header .button {
+    font-size:20px;
+    color: #fff;
+}
+.header .title {
+    font-weight: 600;
+    font-size: 16px;
+}
+/* ## layout e ## */
+
+/* ## modal s ## */
+.modal {
+    position: fixed;
+    left:0;
+    top:0;
+    width: 100%;
+    min-height:100vh;
+    height:100%;
+    z-index: 300;
+    align-items: center;
+    justify-content: center;
+    padding:20px;
+    display: flex;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease-in-out;
+}
+.modal.active {
+    z-index: 300;
+    opacity: 1;
+    visibility: visible;
+}
+.modal::before {
+    display: block;
+    content:"";
+    width: 100%;
+    height: 100%;
+    background:rgba(0,0,0,0.5);
+    position: absolute;
+    left:0;
+    top:0;
+    z-index: -1;
+}
+.modal-box {
+    max-width: 500px;
+    background: #fff;
+    width: 100%;
+    padding: 20px;
+}
+.modal-header {
+    font-weight: 600;
+    margin-bottom:10px;
+}
+.modal-footer {
+    text-align: center;
+    margin-top:15px;
+}
+/* ## modal e ## */
+
+
+/* ## button s ## */
+.btn {
+    display: inline-block;
+    vertical-align: middle;
+    height:45px;
+    line-height: 43px;
+    border:1px solid transparent;
+    text-align: center;
+    border-radius: 3px;
+    padding:0 20px;
+    margin-left:4px;
+    margin-right:4px;
+}
+.btn.btn-primary {
+    background: #1976d2;
+    border-color:#1976d2;
+    color: #fff;
+}
+.btn.btn-default {
+    border-color:#1976d2;
+    background: #fff;
+    color: #1976d2;
+}
+.btn.btn-primary2 {
+    border-color: #13508d;
+    background: #13508d;
+    color: #fff;
+}
+.btn.btn-sub {
+    border-color: #4a4a4a;
+    background:#4a4a4a;
+    color: #fff;
+}
+.btn .icon {
+    font-size: 16px;
+}
+/* ## button e ## */
+
+
+.chat-item {
+    display: flex;
+    align-items: center;
+    padding:15px 20px;
+}
+.chat-item .icon {
+    flex: 0 0 50px;
+    max-width: 50px;
+    height:50px;
+    line-height: 50px;
+    border-radius: 100%;
+    background: #eee;
+    text-align: center;
+    font-size: 25px;
+    color: #000;
+}
+.chat-item .item-box {
+    flex: 1 1 auto;
+    padding-left:20px;
+}
+.chat-item .title {
+    font-weight: 600;
+}
+.chat-item .date {
+    font-size: 13px;
+    margin-top:3px;
+    color: #999;
+}
+.send-box {
+    position: fixed;
+    left:0;
+    bottom:0;
+    width: 100%;
+    padding:15px 15px;
+    background:#fff;
+    display: flex;
+}
+.send-box .form-control {
+    background:#f7f7f7;
+    height:45px;
+    line-height: 45px;
+    border-radius: 3px;
+    margin-right: 5px;
+    padding:0 20px;
+    border:1px solid #e5e5e5;
+}
+.form-control.name {
+    flex: 0 0 200px;
+    max-width:200px;
+}
+.form-control.message {
+    flex:1 1 auto;
+}
+.send-box .button {
+    flex: 0 0 45px;
+    max-width: 45px;
+    height:45px;
+    line-height: 45px;
+    background: #1976d2;
+    border-radius: 3px;
+    color:#fff;
+    cursor: pointer;
+    font-size:18px;
+}
+.chat-view {
+    padding:15px 20px 75px;
+}
+.chat-view .chat-item {
+    padding:0 0 15px;
+}
+.view-enter .item-box {
+    padding:8px 10px;
+    background: #eee;
+    text-align: center;
+    border-radius: 3px;
+}
+.view-talk .talk {
+    margin-top: 5px;
+    background: #e0f0ff;
+    padding: 7px 10px;
+    display: inline-block;
+    vertical-align: top;
+    border-radius: 3px;
+    word-break: break-word;
+}
+
+/* ## join s ## */
+.join-container {
+    display: flex;
+    width: 100%;
+    height:100%;
+    min-height:100vh;
+    align-items: center;
+    justify-content: center;
+    background:#1976d2;
+    padding: 20px 20px 100px;
+}
+.join-box {
+    width: 100%;
+    height:100%;
+    max-width: 400px;
+}
+.join-item .title {
+    text-align: center;
+    font-size: 30px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #fff;
+}
+.join-item .title .icon {
+    display: inline-block;
+    vertical-align: top;
+    font-size: 35px;
+    margin-right: -12px;
+    margin-top: -9px;
+}
+.join-item .title .desc {
+    font-size: 14px;
+}
+/* ## join e ## */
