@@ -10,13 +10,12 @@ import {user} from "./user";
 function ChatList() {
     const [chatList, setChatList] = useState([]);
     const [roomName, setRoomName] = useState("");
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
     const navigate = useNavigate();
 
     // 채팅방 목록 조회
     useEffect( () => {
         user();
-
         axios({
             method: "get",
             url: "/chat/rooms"
@@ -59,7 +58,7 @@ function ChatList() {
 
     // 로그아웃
     const logout = () => {
-        localStorage.clear();
+        localStorage.setItem("token", "");
         navigate("/");
         /*axios({
             method: "post",

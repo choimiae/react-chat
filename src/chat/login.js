@@ -30,12 +30,9 @@ function Login() {
             }
         }).then(response => {
             if (response.data.result === "success") {
-                let data = {
-                    "token": response.data.data.accessToken,
-                    "userId": response.data.data.data.userId,
-                    "nickname":response.data.data.data.nickname
-                }
-                localStorage.setItem("user", JSON.stringify(data));
+                localStorage.setItem("token", response.data.data.accessToken);
+                localStorage.setItem("userId", response.data.data.data.userId);
+                localStorage.setItem("nickname", response.data.data.data.nickname);
                 navigate("/list");
             } else {
                 alert("로그인에 실패했습니다.");

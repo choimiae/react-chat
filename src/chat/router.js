@@ -6,7 +6,6 @@ import ChatList from "./list";
 import ChatView from "./view";
 
 function Router() {
-
     return (
         <>
             <Routes>

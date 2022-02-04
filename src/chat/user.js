@@ -1,21 +1,32 @@
-import React, {useEffect} from "react";
+import React from "react";
 import axios from "axios";
-
-export function refreshToken(userId) {
-    axios({
-        method: "post",
-        url: "/login/refresh",
-        data: {
-            userId: userId,
-        }
-    }).then(response => {
-        console.log(response);
-    });
-}
+import Login from "./login";
 
 export function user() {
-    const data = JSON.parse(localStorage.getItem("user"));
+    const token = localStorage.getItem("token");
 
-    axios.defaults.headers.common["Authorization"] = data.token;
-    return data;
+    // 토큰 없을 경우 리프래시 호출 -> 리프래시 토큰도 없을 경우 login 페이지로 넘김
+    /*if(token === null || token === "") {
+        console.log(token)
+        axios({
+            method: "post",
+            url: "/login/refresh",
+            data: {
+                userId: localStorage.getItem("userId"),
+            }
+        }).then(response => {
+            if(response.data === "success") {
+                localStorage.setItem("token", response.data.data.accessToken);
+                token = response.data.data.accessToken;
+
+            } else {
+                return (
+                    <Login />
+                )
+            }
+        });
+    }*/
+
+    axios.defaults.headers.common["Authorization"] = token;
+    return token;
 }

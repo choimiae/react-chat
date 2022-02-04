@@ -1,6 +1,6 @@
 import * as StompJs from '@stomp/stompjs';
 import React, {useEffect, useState, useRef} from "react";
-import {useNavigate, useLocation} from 'react-router-dom';
+import {useNavigate, useLocation, Link} from 'react-router-dom';
 import axios from "axios";
 import {user} from "./user";
 
@@ -28,6 +28,17 @@ function ChatView() {
         return () => disconnect();
     }, [1]);
 
+    // 데이터 통신 누수 방지를 위한 -> clean up 함수
+    useEffect(() => {
+        return () => {
+            setEnter("")
+            setRoomId("")
+            setRoomName("")
+            setMsg("")
+            client.current = "";
+        }
+    }, []);
+
     // 채팅 업데이트에 맞게 스크롤 맨밑으로 이동
     useEffect(() => {
         scrollRef.current?.scrollIntoView({ behavior: "auto" });
@@ -43,10 +54,9 @@ function ChatView() {
             heartbeatIncoming: 4000,
             heartbeatOutgoing: 4000,
             connectHeaders: {
-                Authorization : user().token
+                Authorization : user()
             },
             onConnect: (frame) => {
-                publish("ENTER", "");
                 subscribe();
             },
             onStompError: (frame) => {
@@ -58,16 +68,17 @@ function ChatView() {
 
     // 소켓 연결 끊기
     const disconnect = () => {
-        console.log(21211)
         client.current.deactivate();
     };
 
+    // 채팅방 구독 ->  채팅방 내용 읽어오기
     const subscribe = () => {
         client.current.subscribe("/sub/chat/room/"+roomId, (data) => {
             setEnter((prevEnter) => [...prevEnter, JSON.parse(data.body)]);
         });
     };
 
+    // 채팅방 메시지 전송
     const publish = (type, msg) => {
         if (!client.current.connected) return;
         client.current.publish({
@@ -78,7 +89,7 @@ function ChatView() {
                 "message": msg
             }),
             headers: {
-                Authorization : user().token
+                Authorization : user()
             }
         });
     };
@@ -103,16 +114,10 @@ function ChatView() {
         inputRef.current["msg"].focus();
     });
 
-    // 목록으로 돌아가기
-    const goList = () => {
-        disconnect();
-        navigate("/list");
-    }
-
     return (
         <section className="container">
             <header className="header flex-box flex-ver-c">
-                <button type="button" onClick={()=>{goList()}} className="button mr-15"><i className="fas fa-arrow-circle-left"></i></button>
+                <Link to="/list" className="button mr-15"><i className="fas fa-arrow-circle-left"></i></Link>
                 <h1 className="title">{roomName}</h1>
             </header>
             <section className="chat-view">
