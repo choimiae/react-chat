@@ -1,8 +1,7 @@
 import * as StompJs from '@stomp/stompjs';
 import React, {useEffect, useState, useRef} from "react";
-import {Link, useLocation} from 'react-router-dom';
+import {useNavigate, useLocation} from 'react-router-dom';
 import axios from "axios";
-import {StompSessionProvider} from "react-stomp-hooks";
 import {user} from "./user";
 
 function ChatView() {
@@ -14,6 +13,7 @@ function ChatView() {
     const inputRef =  useRef({});
     const client = useRef({});
     const scrollRef = useRef(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         user();
@@ -23,17 +23,17 @@ function ChatView() {
         }).then(response => {
             setRoomName(response.data.name);
         });
-
         connect();
 
         return () => disconnect();
-    }, []);
+    }, [1]);
 
     // 채팅 업데이트에 맞게 스크롤 맨밑으로 이동
     useEffect(() => {
         scrollRef.current?.scrollIntoView({ behavior: "auto" });
     }, [enter])
 
+    // 소켓 연결
     const connect = () => {
         client.current = new StompJs.Client({
             //brokerURL: 'ws://125.179.146.62:8080/jdh-stomp',
@@ -45,24 +45,25 @@ function ChatView() {
             connectHeaders: {
                 Authorization : user().token
             },
-            onConnect: () => {
+            onConnect: (frame) => {
                 publish("ENTER", "");
                 subscribe();
             },
             onStompError: (frame) => {
                 console.error(frame);
-            },
+            }
         });
         client.current.activate();
     };
 
+    // 소켓 연결 끊기
     const disconnect = () => {
+        console.log(21211)
         client.current.deactivate();
     };
 
     const subscribe = () => {
         client.current.subscribe("/sub/chat/room/"+roomId, (data) => {
-            console.log(JSON.parse(data.body))
             setEnter((prevEnter) => [...prevEnter, JSON.parse(data.body)]);
         });
     };
@@ -75,7 +76,10 @@ function ChatView() {
                 "roomId": roomId,
                 "type": type,
                 "message": msg
-            })
+            }),
+            headers: {
+                Authorization : user().token
+            }
         });
     };
 
@@ -99,24 +103,30 @@ function ChatView() {
         inputRef.current["msg"].focus();
     });
 
+    // 목록으로 돌아가기
+    const goList = () => {
+        disconnect();
+        navigate("/list");
+    }
+
     return (
         <section className="container">
             <header className="header flex-box flex-ver-c">
-                <Link to="/list" className="button mr-15"><i className="fas fa-arrow-circle-left"></i></Link>
+                <button type="button" onClick={()=>{goList()}} className="button mr-15"><i className="fas fa-arrow-circle-left"></i></button>
                 <h1 className="title">{roomName}</h1>
             </header>
             <section className="chat-view">
                 {
                     enter && enter.map((item, index) => {
                         return (
-                            <div className={item.type === "ENTER" ? "chat-item view-enter" : "chat-item view-talk"} key={index} ref={scrollRef}>
+                            <div className={item.type !== "TALK" ? "chat-item view-enter" : "chat-item view-talk"} key={index} ref={scrollRef}>
                                 {
-                                    item.type === "ENTER" ? "" : <div className="icon"><i className="fab fa-jenkins" aria-hidden="true"></i></div>
+                                    item.type !== "TALK" ? "" : <div className="icon"><i className="fab fa-jenkins" aria-hidden="true"></i></div>
                                 }
                                 <div className="item-box">
-                                    {item.type === "ENTER" ? "" : <div className="title">{item.sender}</div>}
+                                    {item.type !== "TALK" ? "" : <div className="title">{item.sender}</div>}
                                     <div className="talk">{item.message}</div>
-                                    {item.type === "ENTER" ? "" : <div className="date">{item.regDt.substr(0,16)}</div>}
+                                    {item.type !== "TALK" ? "" : <div className="date">{item.regDt.substr(0,16)}</div>}
                                 </div>
                             </div>
                         )
