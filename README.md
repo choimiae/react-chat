@@ -17,6 +17,8 @@ ex) 카카오톡
 <br/>
 
 ## 📷 Screen Shot 📷
-![톡톡_로그인](https://github.com/choimiae/hoxy_admin/assets/93104994/14c3f1d5-61da-42fb-9847-6900f3db9e53)
-![톡톡_목록](https://github.com/choimiae/hoxy_admin/assets/93104994/68bc6427-1eba-4632-94a4-142f8aa5f98b)
-![톡톡_뷰](https://github.com/choimiae/hoxy_admin/assets/93104994/1139c76e-2401-499e-a0e9-055ae057ae4f)
+<div>
+  <img src="https://github.com/choimiae/hoxy_admin/assets/93104994/14c3f1d5-61da-42fb-9847-6900f3db9e53" width="300"/>
+  <img src="https://github.com/choimiae/hoxy_admin/assets/93104994/68bc6427-1eba-4632-94a4-142f8aa5f98b" width="300" />
+  <img src="https://github.com/choimiae/hoxy_admin/assets/93104994/1139c76e-2401-499e-a0e9-055ae057ae4f" width="300" />
+</div>
